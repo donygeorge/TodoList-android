@@ -1,5 +1,6 @@
 package com.donygeorge.todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,9 +18,11 @@ import java.util.ArrayList;
 import static com.donygeorge.todolist.R.id.itemsListView;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<String> mItems;
-    ArrayAdapter<String> mItemsAdapter;
-    ListView mItemsListView;
+    private ArrayList<String> mItems;
+    private ArrayAdapter<String> mItemsAdapter;
+    private ListView mItemsListView;
+    private final int EDIT_REQUEST_CODE = 20;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,17 @@ public class MainActivity extends AppCompatActivity {
         setupListViewListener();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // REQUEST_CODE is defined above
+        if (resultCode == RESULT_OK && requestCode == EDIT_REQUEST_CODE) {
+            String text = data.getExtras().getString("text");
+            int position = data.getExtras().getInt("index", -1);
+            mItems.set(position, text);
+            mItemsAdapter.notifyDataSetChanged();
+            writeItems();
+        }
+    }
     public void onAddItem(View v) {
         EditText addItemEditText = (EditText)findViewById(R.id.addItemEditText);
         String itemText = addItemEditText.getText().toString();
@@ -42,6 +56,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupListViewListener() {
+        mItemsListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+                        intent.putExtra("index", i);
+                        intent.putExtra("text", mItems.get(i));
+                        startActivityForResult(intent, EDIT_REQUEST_CODE);
+                    }
+                }
+        );
+
+
         mItemsListView.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
                     @Override
