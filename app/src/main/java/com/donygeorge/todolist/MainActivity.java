@@ -9,11 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.donygeorge.todolist.R.id.itemsListView;
 
@@ -83,22 +82,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            mItems = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            mItems = new ArrayList<String>();
+        List<ItemModel> items = SQLite.select().
+                from(ItemModel.class).
+                queryList();
+        mItems = new ArrayList<String>();
+        for (ItemModel item : items) {
+            mItems.add(item.text);
         }
     }
 
     private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, mItems);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i < mItems.size(); i++) {
+            ItemModel item = new ItemModel();
+            item.id = i;
+            item.text = mItems.get(i);
+            item.save();
+        }
+
+        // Delete extra items
+        List<ItemModel> items = SQLite.select().
+                from(ItemModel.class).
+                queryList();
+        for (ItemModel item : items) {
+            if (item.id >= mItems.size()) {
+                item.delete();
+            }
         }
     }
 }
