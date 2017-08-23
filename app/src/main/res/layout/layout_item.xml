@@ -43,10 +43,10 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/priorityImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@android:drawable/presence_video_away" />
+        app:srcCompat="@drawable/circle_orange" />
 
 </LinearLayout>
