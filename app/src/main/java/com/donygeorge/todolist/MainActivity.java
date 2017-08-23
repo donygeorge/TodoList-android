@@ -1,11 +1,10 @@
 package com.donygeorge.todolist;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -15,7 +14,7 @@ import java.util.List;
 
 import static com.donygeorge.todolist.R.id.itemsListView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditItemDialogFragment.EditItemDialogListener {
     private ArrayList<Item> mItems;
     private ItemsAdapter mItemsAdapter;
     private ListView mItemsListView;
@@ -34,34 +33,35 @@ public class MainActivity extends AppCompatActivity {
         setupListViewListener();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && requestCode == EDIT_REQUEST_CODE) {
-            String text = data.getExtras().getString("text");
-            int position = data.getExtras().getInt("index", -1);
-            mItems.set(position, new Item(text));
-            mItemsAdapter.notifyDataSetChanged();
-            writeItems();
-        }
-    }
     public void onAddItem(View v) {
-        EditText addItemEditText = (EditText)findViewById(R.id.addItemEditText);
-        String itemText = addItemEditText.getText().toString();
-        mItemsAdapter.add(new Item(itemText));
-        addItemEditText.setText("");
+        showEditItemDialogFragment(null, -1);
+    }
+
+    private EditItemDialogFragment showEditItemDialogFragment(Item item, int position) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemDialogFragment editItemDialogFragment = EditItemDialogFragment.newInstance(item, position);
+        editItemDialogFragment.show(fm, "fragment_edit_item");
+        return editItemDialogFragment;
+    }
+
+    @Override
+    public void onFinishEditDialog(Item item, int position) {
+        if (position == -1) {
+            mItems.add(item);
+        } else {
+            mItems.set(position, item);
+        }
+        mItemsAdapter.notifyDataSetChanged();;
         writeItems();
     }
+
 
     private void setupListViewListener() {
         mItemsListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-                        intent.putExtra("index", i);
-                        intent.putExtra("text", mItems.get(i).text);
-                        startActivityForResult(intent, EDIT_REQUEST_CODE);
+                        showEditItemDialogFragment(mItems.get(i), i);
                     }
                 }
         );
@@ -86,25 +86,33 @@ public class MainActivity extends AppCompatActivity {
                 queryList();
         mItems = new ArrayList<Item>();
         for (ItemModel itemModel : itemModels) {
-            mItems.add(new Item(itemModel.text));
+            mItems.add(new Item(itemModel));
         }
+    }
+
+    private ItemModel getModel(int position, Item item) {
+        ItemModel model = new ItemModel();
+        model.id = position;
+        model.text = item.text;
+        model.date = item.completionDate;
+        model.completed = item.completed;
+        model.priority = item.priority.ordinal();
+        return model;
     }
 
     private void writeItems() {
         for (int i = 0; i < mItems.size(); i++) {
-            ItemModel item = new ItemModel();
-            item.id = i;
-            item.text = mItems.get(i).text;
-            item.save();
+            ItemModel model = getModel(i, mItems.get(i));
+            model.save();
         }
 
         // Delete extra items
-        List<ItemModel> items = SQLite.select().
+        List<ItemModel> models = SQLite.select().
                 from(ItemModel.class).
                 queryList();
-        for (ItemModel item : items) {
-            if (item.id >= mItems.size()) {
-                item.delete();
+        for (ItemModel model : models) {
+            if (model.id >= mItems.size()) {
+                model.delete();
             }
         }
     }

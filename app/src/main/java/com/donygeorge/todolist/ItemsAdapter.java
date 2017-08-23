@@ -23,11 +23,10 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.layout_item, parent, false);
         }
-        // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.itemTextView);
-        // Populate the data into the template view using the data object
-        tvName.setText(item.text);
-        // Return the completed view to render on screen
+        final TextView itemTextView = (TextView) convertView.findViewById(R.id.itemTextView);
+        itemTextView.setText(item.text);
+        final TextView dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
+        dateTextView.setText(item.completionDate.toString());
         return convertView;
     }
 }
