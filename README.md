@@ -4,7 +4,7 @@
 
 Submitted by: **Dony George**
 
-Time spent: **1** hour spent in total
+Time spent: **5** hours spent in total
 
 ## User Stories
 
@@ -25,7 +25,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Add app icons
 
 ## Video Walkthrough
 
