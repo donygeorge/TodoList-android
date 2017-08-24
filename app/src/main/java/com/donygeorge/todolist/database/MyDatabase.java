@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.database;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

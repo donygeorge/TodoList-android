@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.donygeorge.todolist.database.ItemDatabaseModel;
+import com.donygeorge.todolist.models.Item;
+import com.donygeorge.todolist.adapters.ItemsAdapter;
+import com.donygeorge.todolist.R;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -81,17 +85,17 @@ public class MainActivity extends AppCompatActivity implements EditItemDialogFra
     }
 
     private void readItems() {
-        List<ItemModel> itemModels = SQLite.select().
-                from(ItemModel.class).
+        List<ItemDatabaseModel> itemDatabaseModels = SQLite.select().
+                from(ItemDatabaseModel.class).
                 queryList();
         mItems = new ArrayList<Item>();
-        for (ItemModel itemModel : itemModels) {
-            mItems.add(new Item(itemModel));
+        for (ItemDatabaseModel itemDatabaseModel : itemDatabaseModels) {
+            mItems.add(new Item(itemDatabaseModel));
         }
     }
 
-    private ItemModel getModel(int position, Item item) {
-        ItemModel model = new ItemModel();
+    private ItemDatabaseModel getModel(int position, Item item) {
+        ItemDatabaseModel model = new ItemDatabaseModel();
         model.id = position;
         model.text = item.text;
         model.date = item.completionDate;
@@ -102,15 +106,15 @@ public class MainActivity extends AppCompatActivity implements EditItemDialogFra
 
     private void writeItems() {
         for (int i = 0; i < mItems.size(); i++) {
-            ItemModel model = getModel(i, mItems.get(i));
+            ItemDatabaseModel model = getModel(i, mItems.get(i));
             model.save();
         }
 
         // Delete extra items
-        List<ItemModel> models = SQLite.select().
-                from(ItemModel.class).
+        List<ItemDatabaseModel> models = SQLite.select().
+                from(ItemDatabaseModel.class).
                 queryList();
-        for (ItemModel model : models) {
+        for (ItemDatabaseModel model : models) {
             if (model.id >= mItems.size()) {
                 model.delete();
             }

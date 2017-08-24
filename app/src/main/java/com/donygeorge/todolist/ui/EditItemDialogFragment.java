@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.ui;
 
 
 import android.app.AlertDialog;
@@ -14,6 +14,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
+
+import com.donygeorge.todolist.models.Item;
+import com.donygeorge.todolist.models.Priority;
+import com.donygeorge.todolist.R;
 
 import java.util.Date;
 
@@ -56,7 +60,7 @@ public class EditItemDialogFragment extends DialogFragment {
         mPosition = getArguments().getInt(POSITION_STRING);
         return getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_item, container);
     }
-    
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

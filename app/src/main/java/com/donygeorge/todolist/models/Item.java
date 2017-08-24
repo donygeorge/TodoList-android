@@ -1,5 +1,7 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.models;
 
+
+import com.donygeorge.todolist.database.ItemDatabaseModel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +20,7 @@ public class Item implements Serializable {
         this.completed = completed;
     }
 
-    public Item(ItemModel model) {
+    public Item(ItemDatabaseModel model) {
         this(model.text, model.date, Priority.values()[model.priority], model.completed);
     }
 

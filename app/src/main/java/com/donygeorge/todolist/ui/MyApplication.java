@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.ui;
 
 import android.app.Application;
 

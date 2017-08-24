@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.database;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -9,21 +9,21 @@ import java.util.Date;
 
 // **Note:** Your class must extend from BaseModel
 @Table(database = MyDatabase.class)
-public class ItemModel extends BaseModel {
+public class ItemDatabaseModel extends BaseModel {
 
     @Column
     @PrimaryKey
-    int id;
+    public int id;
 
     @Column
-    String text;
+    public String text;
 
     @Column
-    Date date;
+    public Date date;
 
     @Column
-    int priority;
+    public int priority;
 
     @Column
-    boolean completed;
+    public boolean completed;
 }

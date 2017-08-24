@@ -1,4 +1,4 @@
-package com.donygeorge.todolist;
+package com.donygeorge.todolist.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.donygeorge.todolist.models.Item;
+import com.donygeorge.todolist.R;
+
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
