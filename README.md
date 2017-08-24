@@ -4,7 +4,7 @@
 
 Submitted by: **Dony George**
 
-Time spent: **5** hours spent in total
+Time spent: **4** hours spent in total
 
 ## User Stories
 
@@ -41,12 +41,17 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 
 **Question 1:** "What are your reactions to the Android app development platform so far? Compare and contrast Android's approach to layouts and user interfaces in past platforms you've used."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** I have developed a couple of android apps around 4 years ago. Compared to back then, I don't see any major changes while using 'LinearLayout'. 'ConstraintLayout' is certainly new but isn't the most intuitive to use in my opinion. Android's layout approach seems similar in many ways to different ways of doing layout on iOS and Windows (I've worked on these platforms as well). With the LinearLayout, one improvement would be to make it easier to visually align elements with existing elements.
 
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** The ArrayAdapter is a layer between the arraylist of items which just contain the data and the UI component: list view. The ArrayAdaptor has logic to convert each of these individual items to a View that is displayed in a ListView. ArrayAdapter only creates views for the items that are on the screen (and maybe a couple extra depending ons crolling speed). When an item moves off screen, the View used to display the item is reused for the next item displayed on the screen.
+
+If convertView is null, there is no View that is not being currently used. In such cases, we inflate a new View. However, in case convertView is not null, we can reuse this View to display the current Item.
 
 ## Notes
 
 Describe any challenges encountered while building the app.
+
+- It was tricky to create the UI using the UI builder in Android Studio. I particularly struggled a bit with aligning the individual UI elements correctly.
+- I briefly switched to using Kotlin instead of Java. However, I switched back to Java due to time constraints and my unfamiliarity with Kotlin.
